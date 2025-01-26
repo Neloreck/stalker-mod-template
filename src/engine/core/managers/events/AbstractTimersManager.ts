@@ -32,9 +32,9 @@ export class AbstractTimersManager extends AbstractManager {
    */
   public static registerGameTimeout(
     callback: (offset: TDuration) => void,
-    delay: TDuration
+    delay?: TDuration
   ): LuaMultiReturn<[AnyCallable, ITimeoutDescriptor, AnyCallable]> {
-    return getManager(this).registerGameTimeout(callback, delay);
+    return getManager(this).registerGameTimeout(callback, delay || 0);
   }
 
   public readonly intervals: LuaTable<IIntervalDescriptor, boolean> = new LuaTable();

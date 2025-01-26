@@ -2,7 +2,7 @@ import * as cp from "child_process";
 
 import { blue } from "chalk";
 
-import { GAME_DATA_PARTICLES_DIR, XRF_UTILS_PATH } from "#/globals";
+import { RESOURCES_PARTICLES_UNPACKED_DIR, XRF_UTILS_PATH } from "#/globals";
 import { NodeLogger } from "#/utils/logging";
 import { TimeTracker } from "#/utils/timing";
 
@@ -22,7 +22,7 @@ export async function verifyParticlesUnpacked(parameters: IFormatParticlesUnpack
 
   const timeTracker: TimeTracker = new TimeTracker().start();
 
-  const command: string = `${XRF_UTILS_PATH} verify-particles -p ${GAME_DATA_PARTICLES_DIR} -u`;
+  const command: string = `${XRF_UTILS_PATH} verify-particles -p ${RESOURCES_PARTICLES_UNPACKED_DIR} -u`;
 
   log.info("Execute:", blue(command));
   cp.execSync(command, { stdio: "inherit" });

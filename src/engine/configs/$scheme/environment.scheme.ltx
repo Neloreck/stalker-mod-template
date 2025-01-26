@@ -79,10 +79,10 @@ surge_state = u8 ; bool
 
 [$ambient]
 strict = true
-effects = string[]
+effects = ?string[]
 max_effect_period = f32
 min_effect_period = f32
-sound_channels = string[]
+sound_channels = ?string[]
 
 [$fog_volume]
 strict = true
@@ -124,12 +124,12 @@ rain_density = f32
 sky_color = vector
 sky_rotation = f32
 sky_texture = string
-sun = string
+sun = ?string
 sun_altitude = f32
 sun_color = vector
 sun_longitude = f32
 sun_shafts_intensity = f32
-thunderbolt_collection = string
+thunderbolt_collection = ?string
 thunderbolt_duration = f32
 thunderbolt_period = f32
 tree_amplitude_intensity = ?f32

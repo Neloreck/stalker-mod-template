@@ -16,6 +16,7 @@ import {
   parseSpawnDetails,
   parseStringOptional,
   parseStringsList,
+  parseStringsSet,
   parseWaypointData,
   parseWaypointsData,
   parseWaypointsDataFromList,
@@ -39,6 +40,22 @@ describe("parseStringsList util", () => {
     expect(parseStringsList("-1 2 -3")).toEqualLuaArrays(["-1", "2", "-3"]);
     expect(parseStringsList("-1.5 2.255")).toEqualLuaArrays(["-1.5", "2.255"]);
     expect(parseStringsList("a_b, c_d")).toEqualLuaArrays(["a_b", "c_d"]);
+  });
+});
+
+describe("parseStringsSet util", () => {
+  it("should correctly parse names array", () => {
+    expect(parseStringsSet("a, b, c")).toEqualLuaTables({ a: true, b: true, c: true });
+    expect(parseStringsSet("a b c")).toEqualLuaTables({ a: true, b: true, c: true });
+    expect(parseStringsSet("name_1, example_b, name_complex_here")).toEqualLuaTables({
+      name_1: true,
+      example_b: true,
+      name_complex_here: true,
+    });
+    expect(parseStringsSet("-1, 2, -3")).toEqualLuaTables({ "-1": true, "2": true, "-3": true });
+    expect(parseStringsSet("-1 2 -3")).toEqualLuaTables({ "-1": true, "2": true, "-3": true });
+    expect(parseStringsSet("-1.5 2.255")).toEqualLuaTables({ "-1.5": true, "2.255": true });
+    expect(parseStringsSet("a_b, c_d")).toEqualLuaTables({ a_b: true, c_d: true });
   });
 });
 

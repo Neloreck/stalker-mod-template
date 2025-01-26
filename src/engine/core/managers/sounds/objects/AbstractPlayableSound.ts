@@ -21,13 +21,13 @@ export abstract class AbstractPlayableSound {
   public abstract readonly type: EPlayableSound;
 
   public readonly section: TSection;
-  public soundObject: Optional<SoundObject> = null;
   public path: TPath;
+  public soundObject: Optional<SoundObject> = null;
   public shouldPlayAlways: boolean = false;
 
   protected constructor(ini: IniFile, section: TSection) {
-    this.path = readIniString(ini, section, "path", true);
     this.section = section;
+    this.path = readIniString(ini, section, "path", true);
   }
 
   /**

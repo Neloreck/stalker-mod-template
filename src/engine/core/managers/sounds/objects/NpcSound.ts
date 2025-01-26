@@ -7,7 +7,13 @@ import { AbstractPlayableSound } from "@/engine/core/managers/sounds/objects/Abs
 import { EPlayableSound, ESoundPlaylistType } from "@/engine/core/managers/sounds/sounds_types";
 import { abort } from "@/engine/core/utils/assertion";
 import { getObjectCommunity } from "@/engine/core/utils/community";
-import { parseStringsList, readIniBoolean, readIniNumber, readIniString } from "@/engine/core/utils/ini";
+import {
+  readIniBoolean,
+  readIniNumber,
+  readIniNumberList,
+  readIniString,
+  readIniStringSet,
+} from "@/engine/core/utils/ini";
 import { LuaLogger } from "@/engine/core/utils/logging";
 import { communities, TCommunity } from "@/engine/lib/constants/communities";
 import { roots } from "@/engine/lib/constants/roots";
@@ -28,11 +34,11 @@ import {
   TName,
   TNumberId,
   TPath,
+  TSection,
   TTimestamp,
 } from "@/engine/lib/types";
 
 const logger: LuaLogger = new LuaLogger($filename);
-const nstl = 64;
 
 export interface INpcSoundDescriptor {
   id: TNumberId;
@@ -43,6 +49,19 @@ export interface INpcSoundDescriptor {
  * todo;
  */
 export class NpcSound extends AbstractPlayableSound {
+  public static readonly AVAILABLE_COMMUNITIES_ALL: string = string.format(
+    "%s, %s, %s, %s, %s, %s, %s, %s, %s",
+    communities.stalker,
+    communities.ecolog,
+    communities.bandit,
+    communities.dolg,
+    communities.freedom,
+    communities.army,
+    communities.zombied,
+    communities.monolith,
+    communities.killer
+  );
+
   public static baseIndex: TIndex = stalker_ids.sound_script + 10_000;
   public static readonly type: EPlayableSound = EPlayableSound.NPC;
 
@@ -82,79 +101,52 @@ export class NpcSound extends AbstractPlayableSound {
   public readonly delay: TDuration;
   public readonly random: number;
 
-  public constructor(soundIni: IniFile, section: string) {
-    super(soundIni, section);
+  public constructor(ini: IniFile, section: TSection) {
+    super(ini, section);
 
-    this.prefix = readIniBoolean(soundIni, section, "npc_prefix", false, false);
-    this.shuffle = readIniString(
-      soundIni,
+    this.prefix = readIniBoolean(ini, section, "npc_prefix", false, false);
+    this.shuffle = readIniString(ini, section, "shuffle", false, null, ESoundPlaylistType.RANDOM) as ESoundPlaylistType;
+    this.isGroupSound = readIniBoolean(ini, section, "group_snd", false, false);
+    this.shouldPlayAlways = readIniBoolean(ini, section, "play_always", false, false);
+    this.isCombatSound = readIniBoolean(ini, section, "is_combat_sound", false, false);
+    this.delay = readIniNumber(ini, section, "delay_sound", false, 0);
+
+    const idle: LuaArray<TDuration> = readIniNumberList(ini, section, "idle", false, "3,5,100");
+
+    this.minIdle = idle.get(1);
+    this.maxIdle = idle.get(2);
+    this.random = idle.get(3);
+
+    this.faction = readIniString(ini, section, "faction", false, null, "");
+    this.point = readIniString(ini, section, "point", false, null, "");
+    this.message = readIniString(ini, section, "message", false, null, "");
+
+    this.availableCommunities = readIniStringSet(
+      ini,
       section,
-      "shuffle",
+      "avail_communities",
       false,
-      null,
-      ESoundPlaylistType.RANDOM
-    ) as ESoundPlaylistType;
-    this.isGroupSound = readIniBoolean(soundIni, section, "group_snd", false, false);
-    this.shouldPlayAlways = readIniBoolean(soundIni, section, "play_always", false, false);
-    this.isCombatSound = readIniBoolean(soundIni, section, "is_combat_sound", false, false);
-    this.delay = readIniNumber(soundIni, section, "delay_sound", false, 0);
-
-    const interval: LuaTable<number, string> = parseStringsList(
-      readIniString(soundIni, section, "idle", false, null, "3,5,100")
+      NpcSound.AVAILABLE_COMMUNITIES_ALL
     );
-
-    this.minIdle = tonumber(interval.get(1))!;
-    this.maxIdle = tonumber(interval.get(2))!;
-    this.random = tonumber(interval.get(3))!;
-
-    this.faction = readIniString(soundIni, section, "faction", false, null, "");
-    this.point = readIniString(soundIni, section, "point", false, null, "");
-    this.message = readIniString(soundIni, section, "message", false, null, "");
-
-    const availableCommunities: LuaArray<TCommunity> = parseStringsList<TCommunity>(
-      readIniString(
-        soundIni,
-        section,
-        "avail_communities",
-        false,
-        null,
-        string.format(
-          "%s, %s, %s, %s, %s, %s, %s, %s, %s",
-          communities.stalker,
-          communities.ecolog,
-          communities.bandit,
-          communities.dolg,
-          communities.freedom,
-          communities.army,
-          communities.zombied,
-          communities.monolith,
-          communities.killer
-        )
-      )
-    );
-
-    for (const [, community] of availableCommunities) {
-      this.availableCommunities.set(community, true);
-    }
   }
 
   /**
    * todo;
    */
   public override reset(objectId: TNumberId): void {
-    const object: Optional<GameObject> = registry.objects.get(objectId)?.object;
+    const object: Optional<GameObject> = registry.objects.get(objectId)?.object as Optional<GameObject>;
 
     this.playingStartedAt = null;
     this.playedSoundIndex = null;
     this.canPlayGroupSound = true;
     this.canPlaySound.set(objectId, true);
 
-    if (object !== null) {
+    if (object) {
       object.set_sound_mask(-1);
       object.set_sound_mask(0);
     }
 
-    if (this.pdaSoundObject !== null) {
+    if (this.pdaSoundObject) {
       this.pdaSoundObject.stop();
       this.pdaSoundObject = null;
     }
@@ -164,79 +156,13 @@ export class NpcSound extends AbstractPlayableSound {
    * todo;
    */
   public override isPlaying(objectId: TNumberId): boolean {
-    const obj: Optional<GameObject> = registry.objects.get(objectId) && registry.objects.get(objectId).object!;
+    const object: Optional<GameObject> = registry.objects.get(objectId) && registry.objects.get(objectId).object!;
 
-    if (obj === null) {
+    if (object === null) {
       return false;
     }
 
-    return obj.active_sound_count() !== 0 || this.pdaSoundObject?.playing() === true;
-  }
-
-  /**
-   * todo;
-   */
-  public initializeObject(object: GameObject): void {
-    const objectId: TNumberId = object.id();
-    const objectDescriptor = {
-      id: NpcSound.getNextId(),
-      max: 0,
-    };
-
-    this.objects.set(objectId, objectDescriptor);
-    this.soundPaths.set(objectId, new LuaTable());
-
-    let characterPrefix: string = "";
-
-    if (!this.prefix) {
-      characterPrefix = object.sound_prefix();
-      object.sound_prefix("characters_voice\\");
-    }
-
-    if (this.isCombatSound) {
-      objectDescriptor.max =
-        object.add_combat_sound(this.path, nstl, snd_type.talk, 2, 1, objectDescriptor.id, "bip01_head") - 1;
-    } else {
-      objectDescriptor.max = object.add_sound(this.path, nstl, snd_type.talk, 2, 1, objectDescriptor.id) - 1;
-    }
-
-    const fs: FS = getFS();
-    const objectSoundPrefix: TLabel = object.sound_prefix();
-
-    if (fs.exist(roots.gameSounds, `${objectSoundPrefix + this.path}.ogg`) !== null) {
-      this.soundPaths.get(objectId).set(1, objectSoundPrefix + this.path);
-    } else {
-      let index: TIndex = 1;
-
-      while (fs.exist(roots.gameSounds, `${objectSoundPrefix + this.path + index}.ogg`)) {
-        this.soundPaths.get(objectId).set(index, objectSoundPrefix + this.path + index);
-        index += 1;
-      }
-    }
-
-    if (this.objects.get(objectId).max < 0) {
-      abort(
-        "Could not find sounds %s with prefix %s, name %s, path %s, index %s, at %s - %s",
-        tostring(this.path),
-        objectSoundPrefix,
-        object.name(),
-        this.path,
-        this.objects.get(objectId).id,
-        this.objects.get(objectId).max
-      );
-    }
-
-    if (!this.prefix) {
-      object.sound_prefix(characterPrefix);
-    }
-
-    if (this.isGroupSound) {
-      this.canPlayGroupSound = true;
-    } else {
-      if (this.canPlaySound.get(objectId) !== false) {
-        this.canPlaySound.set(objectId, true);
-      }
-    }
+    return object.active_sound_count() !== 0 || this.pdaSoundObject?.playing() === true;
   }
 
   /**
@@ -347,56 +273,6 @@ export class NpcSound extends AbstractPlayableSound {
   /**
    * todo;
    */
-  public selectNextSound(objectId: TNumberId): TNumberId {
-    const objectDescriptor: Optional<INpcSoundDescriptor> = this.objects.get(objectId);
-
-    // Play random
-    if (this.shuffle === ESoundPlaylistType.RANDOM) {
-      if (objectDescriptor.max === 0) {
-        return 0;
-      } else if (this.playedSoundIndex !== null) {
-        const nextPlayIndex: TIndex = math.random(0, objectDescriptor.max - 1);
-
-        if (nextPlayIndex === this.playedSoundIndex) {
-          return nextPlayIndex + 1;
-        }
-
-        return nextPlayIndex;
-      }
-
-      return math.random(0, objectDescriptor.max);
-    }
-
-    // Play in sequence.
-    if (this.shuffle === ESoundPlaylistType.SEQUENCE) {
-      if (this.playedSoundIndex === -1) {
-        return -1;
-      } else if (this.playedSoundIndex === null) {
-        return 0;
-      } else if (this.playedSoundIndex < objectDescriptor.max) {
-        return this.playedSoundIndex + 1;
-      } else {
-        return -1;
-      }
-    }
-
-    // Play in loop.
-    if (this.shuffle === ESoundPlaylistType.LOOP) {
-      if (this.playedSoundIndex === null) {
-        return 0;
-      } else if (this.playedSoundIndex < objectDescriptor.max) {
-        return this.playedSoundIndex + 1;
-      } else {
-        return 0;
-      }
-    }
-
-    abort("Unexpected shuffle type provided: '%s'.", this.shuffle);
-  }
-
-  /**
-   * todo;
-   */
   public override stop(objectId: TNumberId): void {
     const object: Optional<GameObject> = registry.objects.get(objectId)?.object;
 
@@ -496,5 +372,121 @@ export class NpcSound extends AbstractPlayableSound {
     if (!this.isGroupSound) {
       this.canPlaySound.set(object.id(), reader.r_bool());
     }
+  }
+
+  /**
+   * todo;
+   * Note: Performance heavy method, especially when sound files are not cached yet.
+   */
+  public initializeObject(object: GameObject): void {
+    const objectId: TNumberId = object.id();
+    const objectDescriptor = {
+      id: NpcSound.getNextId(),
+      max: 0,
+    };
+    const objectPathsDescriptor: LuaArray<TPath> = new LuaTable();
+
+    this.objects.set(objectId, objectDescriptor);
+    this.soundPaths.set(objectId, objectPathsDescriptor);
+
+    let characterPrefix: string = "";
+
+    if (!this.prefix) {
+      characterPrefix = object.sound_prefix();
+      object.sound_prefix("characters_voice\\");
+    }
+
+    // Register current sounds object as combat/regular sound for target game object.
+    objectDescriptor.max = this.isCombatSound
+      ? object.add_combat_sound(this.path, 64, snd_type.talk, 2, 1, objectDescriptor.id, "bip01_head") - 1
+      : object.add_sound(this.path, 64, snd_type.talk, 2, 1, objectDescriptor.id) - 1;
+
+    const fs: FS = getFS();
+    const objectSoundPrefix: TLabel = object.sound_prefix();
+
+    if (fs.exist(roots.gameSounds, `${objectSoundPrefix}${this.path}.ogg`) !== null) {
+      objectPathsDescriptor.set(1, objectSoundPrefix + this.path);
+    } else {
+      let index: TIndex = 1;
+
+      while (fs.exist(roots.gameSounds, `${objectSoundPrefix}${this.path}${index}.ogg`)) {
+        objectPathsDescriptor.set(index, objectSoundPrefix + this.path + index);
+        index += 1;
+      }
+    }
+
+    if (this.objects.get(objectId).max < 0) {
+      abort(
+        "Could not find sounds '%s' with prefix '%s', name '%s', path '%s', index '%s', at '%s' - '%s'",
+        tostring(this.path),
+        objectSoundPrefix,
+        object.name(),
+        this.path,
+        this.objects.get(objectId).id,
+        this.objects.get(objectId).max
+      );
+    }
+
+    if (!this.prefix) {
+      object.sound_prefix(characterPrefix);
+    }
+
+    if (this.isGroupSound) {
+      this.canPlayGroupSound = true;
+    } else {
+      if (this.canPlaySound.get(objectId) !== false) {
+        this.canPlaySound.set(objectId, true);
+      }
+    }
+  }
+
+  /**
+   * todo;
+   */
+  public selectNextSound(objectId: TNumberId): TNumberId {
+    const objectDescriptor: Optional<INpcSoundDescriptor> = this.objects.get(objectId);
+
+    // Play random
+    if (this.shuffle === ESoundPlaylistType.RANDOM) {
+      if (objectDescriptor.max === 0) {
+        return 0;
+      } else if (this.playedSoundIndex !== null) {
+        const nextPlayIndex: TIndex = math.random(0, objectDescriptor.max - 1);
+
+        if (nextPlayIndex === this.playedSoundIndex) {
+          return nextPlayIndex + 1;
+        }
+
+        return nextPlayIndex;
+      }
+
+      return math.random(0, objectDescriptor.max);
+    }
+
+    // Play in sequence.
+    if (this.shuffle === ESoundPlaylistType.SEQUENCE) {
+      if (this.playedSoundIndex === -1) {
+        return -1;
+      } else if (this.playedSoundIndex === null) {
+        return 0;
+      } else if (this.playedSoundIndex < objectDescriptor.max) {
+        return this.playedSoundIndex + 1;
+      } else {
+        return -1;
+      }
+    }
+
+    // Play in loop.
+    if (this.shuffle === ESoundPlaylistType.LOOP) {
+      if (this.playedSoundIndex === null) {
+        return 0;
+      } else if (this.playedSoundIndex < objectDescriptor.max) {
+        return this.playedSoundIndex + 1;
+      } else {
+        return 0;
+      }
+    }
+
+    abort("Unexpected shuffle type provided: '%s'.", this.shuffle);
   }
 }

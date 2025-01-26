@@ -3,10 +3,8 @@ import * as path from "path";
 
 import { blue, blueBright } from "chalk";
 
-import { default as config } from "#/config.json";
-import { CLI_DIR, GAME_DATA_LTX_CONFIGS_DIR, XRF_UTILS_PATH } from "#/globals";
+import { GAME_DATA_LTX_CONFIGS_DIR, RESOURCES_DIR, XRF_UTILS_PATH } from "#/globals";
 import { IIconsCommandParameters } from "#/icons/run";
-import { normalizeParameterPath } from "#/utils/fs/normalize_parameter_path";
 import { NodeLogger } from "#/utils/logging";
 import { TimeTracker } from "#/utils/timing";
 
@@ -23,16 +21,9 @@ export async function unpackEquipmentIcons(parameters: IIconsCommandParameters):
   const command: string = `${XRF_UTILS_PATH} unpack-equipment-icons --system-ltx ${path.resolve(
     GAME_DATA_LTX_CONFIGS_DIR,
     "system.ltx"
-  )} --source ${path.resolve(
-    CLI_DIR,
-    normalizeParameterPath(config.resources.mod_assets_base_folder),
-    "textures",
-    "ui",
-    "ui_icon_equipment.dds"
-  )} --output ${path.resolve(
-    CLI_DIR,
-    normalizeParameterPath(config.resources.mod_assets_base_folder),
-    "textures",
+  )} --source ${path.resolve(RESOURCES_DIR, "textures", "ui", "ui_icon_equipment.dds")} --output ${path.resolve(
+    RESOURCES_DIR,
+    "textures_unpacked",
     "ui",
     "ui_icon_equipment"
   )}${parameters.verbose ? " --verbose" : ""}`;

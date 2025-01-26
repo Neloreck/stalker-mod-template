@@ -3,10 +3,8 @@ import * as path from "path";
 
 import { blue, blueBright } from "chalk";
 
-import { default as config } from "#/config.json";
-import { CLI_DIR, GAME_DATA_UI_DIR, XRF_UTILS_PATH } from "#/globals";
+import { GAME_DATA_UI_DIR, RESOURCES_DIR, XRF_UTILS_PATH } from "#/globals";
 import { IIconsCommandParameters } from "#/icons/run";
-import { normalizeParameterPath } from "#/utils/fs/normalize_parameter_path";
 import { NodeLogger } from "#/utils/logging";
 import { TimeTracker } from "#/utils/timing";
 
@@ -21,11 +19,10 @@ export function packTextureDescriptions(parameters: IIconsCommandParameters): vo
     GAME_DATA_UI_DIR,
     "textures_descr",
     parameters.description ?? ""
-  )} --base ${path.resolve(
-    CLI_DIR,
-    normalizeParameterPath(config.resources.mod_assets_base_folder),
+  )} --base ${path.resolve(RESOURCES_DIR, "textures_unpacked")} --output ${path.resolve(
+    RESOURCES_DIR,
     "textures"
-  )}${parameters.strict ? " --strict" : ""}${parameters.verbose ? " --verbose" : ""}`;
+  )} ${parameters.strict ? " --strict" : ""}${parameters.verbose ? " --verbose" : ""}`;
 
   log.info("Execute:", blue(command));
 

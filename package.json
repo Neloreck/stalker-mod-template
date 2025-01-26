@@ -12,7 +12,9 @@
     "pack:mod": "ts-node -P cli/tsconfig.json cli/run.ts pack mod -c -o",
     "pack:game": "ts-node -P cli/tsconfig.json cli/run.ts pack game -c -o",
     "watch:scripts": "tstl -P ./cli/build/tsconfig.scripts.json --watch",
-    "watch:scripts-optimized": "npx cross-env NO_LUA_LOGS=true tstl -P ./cli/build/tsconfig.scripts.json --watch",
+    "watch:scripts-tracy": "npx cross-env XR_INJECT_TRACY_ZONES=true tstl -P ./cli/build/tsconfig.scripts.json --watch",
+    "watch:scripts-optimized": "npx cross-env XR_NO_LUA_LOGS=true tstl -P ./cli/build/tsconfig.scripts.json --watch",
+    "watch:scripts-tracy-optimized": "npx cross-env XR_INJECT_TRACY_ZONES=true XR_NO_LUA_LOGS=true tstl -P ./cli/build/tsconfig.scripts.json --watch",
     "typecheck": "tstl -P ./cli/build/tsconfig.scripts.json --noEmit",
     "format": "prettier --write \"**/*.(js|ts|tsx|md)\" \"!cli/bin/**/*\" && npm run lint -- --fix && npm run cli format ltx",
     "lint": "eslint . --ext .ts,.tsx,.js -c cli/lint/.eslintrc.base.json --cache --cache-location target/eslint/cache.json",
@@ -21,7 +23,7 @@
     "help": "ts-node -P ./cli/tsconfig.json cli/run.ts -h"
   },
   "dependencies": {
-    "xray16": "1.2.3"
+    "xray16": "1.3.4"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",

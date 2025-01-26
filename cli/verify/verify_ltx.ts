@@ -8,7 +8,7 @@ import { TimeTracker } from "#/utils/timing";
 
 const log: NodeLogger = new NodeLogger("VERIFY_LTX");
 
-export interface IFormatLtxParameters {
+export interface IVerifyLtxParameters {
   strict?: boolean;
   verbose?: boolean;
 }
@@ -17,7 +17,7 @@ export interface IFormatLtxParameters {
  * Verify game ltx config files.
  * Check scheme definitions, inheritance and include checks.
  */
-export async function verifyLtx(parameters: IFormatLtxParameters = {}): Promise<void> {
+export async function verifyLtx(parameters: IVerifyLtxParameters = {}): Promise<void> {
   NodeLogger.IS_VERBOSE = Boolean(parameters.verbose);
 
   log.info("Verifying ltx files");

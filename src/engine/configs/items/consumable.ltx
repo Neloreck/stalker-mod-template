@@ -42,8 +42,6 @@ inv_name_short = default
 inv_weight = 0.01
 visual = dynamics\devices\dev_aptechka\dev_aptechka_low.ogf
 wounds_heal_perc = 0
-; use_sound = characters_voice\multiplayer\team_1\voice_roger_3
-; FOOD
 
 [bread]:booster
 $scheme = $item_booster
@@ -65,7 +63,7 @@ inv_grid_x = 4
 inv_grid_y = 0
 inv_name = st_bread
 inv_name_short = st_bread
-inv_weight = 0.4 ; 0.2
+inv_weight = 0.4
 position_offset = 0.0,0.0,0.0
 use_sound = interface\inv_food
 visual = dynamics\devices\dev_bred\dev_bred.ogf
@@ -144,12 +142,12 @@ inv_grid_x = 3
 inv_grid_y = 0
 inv_name = st_vodka
 inv_name_short = st_vodka
-inv_weight = 0.6 ; 0.2
+inv_weight = 0.6
 position_offset = 0.0,0.0,0.0
 use_sound = interface\inv_vodka
 visual = dynamics\devices\dev_vodka\dev_vodka.ogf
 
-[vodka_script]:vodka ; �� ������������
+[vodka_script]:vodka
 $scheme = $item_booster
 $spawn = "food and drugs\vodka_script"
 inv_weight = 0
@@ -161,7 +159,7 @@ attach_angle_offset = 0.000000, 0.000000, 0.000000
 attach_bone_name = bip01_r_hand
 attach_position_offset = 0.087266, -0.078540, 0.052360
 auto_attach = false
-boost_power_restore = 0.005 ; 0.001
+boost_power_restore = 0.005
 boost_radiation_restore = 0
 boost_time = 60.0
 cost = 50
@@ -170,8 +168,8 @@ eat_alcohol = 0.0
 eat_satiety = 0.0
 inv_grid_height = 1
 inv_grid_width = 1
-inv_grid_x = 3 ; 19 ; 11
-inv_grid_y = 3 ; 7 ; 0
+inv_grid_x = 3
+inv_grid_y = 3
 inv_name = st_energy_drink
 inv_name_short = st_energy_drink
 inv_weight = 0.2
@@ -191,16 +189,13 @@ inv_grid_x = 3
 inv_grid_y = 4
 inv_name = st_bandage
 inv_name_short = st_bandage
-inv_weight = 0.05 ; 0.2
+inv_weight = 0.05
 use_sound = interface\inv_bandage
 visual = dynamics\devices\dev_bandage\dev_bandage.ogf
-; antirad new
 
 [antirad]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\antirad"
-; eat_radiation = -0.5
-; eatable item
 boost_radiation_restore = 0.01
 boost_time = 10.0
 cost = 250
@@ -215,10 +210,8 @@ inv_weight = 0.05
 use_sound = interface\inv_pills
 visual = dynamics\devices\dev_antirad\dev_antirad.ogf
 
-[medkit_script]:booster ; Do not use. Used in xr_wounded for helping wounded stalkers only
+[medkit_script]:booster
 $scheme = $item_booster
-; $spawn = "food and drugs\medkit_script"
-; eatable item
 cost = 300
 description = st_medkit_descr
 eat_health = 0.5
@@ -277,7 +270,6 @@ visual = dynamics\devices\dev_aptechka\dev_aptechka_high.ogf
 [medkit_scientic]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\medkit_scientic"
-; boosters
 boost_bleeding_restore = 0.005
 boost_health_restore = 0.01
 boost_radiation_restore = 0.01
@@ -313,7 +305,6 @@ visual = dynamics\equipments\medical\drug_booster.ogf
 [drug_coagulant]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\drug_coagulant"
-; boost_wound_immunity = 1
 boost_bleeding_restore = 0.03
 boost_time = 20.0
 cost = 200
@@ -330,7 +321,6 @@ visual = dynamics\equipments\medical\drug_coagulant.ogf
 [drug_psy_blockade]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\drug_psy_blockade"
-; boost_telepat_immunity = 0.05
 boost_telepat_protection = 0.05
 boost_time = 60.0
 cost = 550
@@ -347,7 +337,6 @@ visual = dynamics\equipments\medical\drug_psy_blockade.ogf
 [drug_antidot]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\drug_antidot"
-; boost_chemburn_immunity = 0.1
 boost_chemburn_protection = 0.1
 boost_time = 60.0
 cost = 300
@@ -364,7 +353,6 @@ visual = dynamics\equipments\medical\drug_antidot.ogf
 [drug_radioprotector]:booster
 $scheme = $item_booster
 $spawn = "food and drugs\drug_radioprotector"
-; boost_radiation_immunity = 0.015
 boost_radiation_protection = 0.015
 boost_time = 60.0
 cost = 300

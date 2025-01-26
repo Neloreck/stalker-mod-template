@@ -43,7 +43,7 @@ import {
   getObjectSpawnIni,
   setupObjectInfoPortions,
   setupObjectStalkerVisual,
-  syncSpawnedObjectPosition,
+  setupSpawnedObjectPosition,
 } from "@/engine/core/utils/object";
 import { ERelation, setGameObjectRelation, setObjectSympathy } from "@/engine/core/utils/relation";
 import { emitSchemeEvent, initializeObjectInvulnerability, setupObjectLogicsOnSpawn } from "@/engine/core/utils/scheme";
@@ -105,8 +105,6 @@ export class StalkerBinder extends object_binder {
   }
 
   public override net_spawn(serverObject: ServerCreatureObject): boolean {
-    setupObjectStalkerVisual(this.object);
-
     if (!super.net_spawn(serverObject)) {
       return false;
     }
@@ -115,6 +113,8 @@ export class StalkerBinder extends object_binder {
     const objectId: TNumberId = object.id();
     const stalker: Optional<ServerHumanObject> = registry.simulator.object(objectId);
 
+    setupObjectStalkerVisual(object);
+
     if (!stalker) {
       return false;
     }
@@ -122,9 +122,9 @@ export class StalkerBinder extends object_binder {
     logger.info("Go online: %s", object.name());
 
     this.state = registerStalker(this);
-    this.setupCallbacks();
+    object.apply_loophole_direction_distance(1.0);
 
-    this.object.apply_loophole_direction_distance(1.0);
+    this.setupCallbacks();
 
     if (!this.isLoaded) {
       setupObjectInfoPortions(object, getObjectSpawnIni(object));
@@ -154,8 +154,7 @@ export class StalkerBinder extends object_binder {
     initializeObjectThemes(object);
     SchemeReachTask.setup(object);
 
-    syncSpawnedObjectPosition(object, stalker.m_smart_terrain_id);
-
+    setupSpawnedObjectPosition(object, stalker.m_smart_terrain_id);
     setupObjectLogicsOnSpawn(object, this.state, ESchemeType.STALKER, this.isLoaded);
 
     SchemePostCombatIdle.setup(object);

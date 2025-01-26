@@ -23,7 +23,7 @@ import { updateMonsterSquadAction } from "@/engine/core/objects/squad/update";
 import { SchemeHear } from "@/engine/core/schemes/shared/hear/SchemeHear";
 import { pickSectionFromCondList, TConditionList } from "@/engine/core/utils/ini";
 import { LuaLogger } from "@/engine/core/utils/logging";
-import { syncSpawnedObjectPosition } from "@/engine/core/utils/object";
+import { setupSpawnedObjectPosition } from "@/engine/core/utils/object";
 import {
   emitSchemeEvent,
   scriptReleaseMonster,
@@ -89,8 +89,7 @@ export class MonsterBinder extends object_binder {
 
     this.state = registerObject(object);
 
-    syncSpawnedObjectPosition(object, monster.m_smart_terrain_id);
-
+    setupSpawnedObjectPosition(object, monster.m_smart_terrain_id);
     setupObjectLogicsOnSpawn(object, this.state, ESchemeType.MONSTER, this.isLoaded);
 
     return true;

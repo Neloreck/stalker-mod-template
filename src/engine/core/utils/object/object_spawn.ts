@@ -12,7 +12,7 @@ import { ALifeSmartTerrainTask, GameObject, Optional, TNumberId } from "@/engine
  * @param object - game object
  * @param terrainId - target object linked smart terrain id
  */
-export function syncSpawnedObjectPosition(object: GameObject, terrainId: Optional<TNumberId> = null): void {
+export function setupSpawnedObjectPosition(object: GameObject, terrainId: Optional<TNumberId> = null): void {
   const objectId: TNumberId = object.id();
 
   if (registry.spawnedVertexes.has(objectId)) {

@@ -5,8 +5,7 @@ import { food } from "@/engine/lib/constants/items/food";
 import { helmets } from "@/engine/lib/constants/items/helmets";
 import { misc } from "@/engine/lib/constants/items/misc";
 import { outfits } from "@/engine/lib/constants/items/outfits";
-import { weaponAddons } from "@/engine/lib/constants/items/weapon_addons";
-import { weapons } from "@/engine/lib/constants/items/weapons";
+import { weaponAddons, weapons } from "@/engine/lib/constants/items/weapons";
 
 /**
  * List of items that can be looted by stalkers from corpses.
@@ -28,5 +27,4 @@ export const lootableTableExclude = {
   [misc.device_torch]: misc.device_torch,
   [misc.harmonica_a]: misc.harmonica_a,
   [weapons.wpn_binoc]: weapons.wpn_binoc,
-  [weapons.wpn_binocular]: weapons.wpn_binocular,
 } as const;

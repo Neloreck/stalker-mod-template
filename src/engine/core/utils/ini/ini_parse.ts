@@ -45,6 +45,22 @@ export function parseStringsList<T extends string = string>(data: string): LuaAr
 }
 
 /**
+ * Parse list of strings separated by commas and whitespaces as set.
+ *
+ * @param data - string to parse
+ * @returns list of parsed strings
+ */
+export function parseStringsSet<T extends string = string>(data: string): LuaTable<T, boolean> {
+  const result: LuaTable<T, boolean> = new LuaTable();
+
+  for (const it of string.gfind(data, "([%w_%-.\\]+)%p*")) {
+    result.set(it as T, true);
+  }
+
+  return result;
+}
+
+/**
  * Parse util to transform string of numbers to array.
  * Example: "1, 2, 3" -> [1, 2, 3].
  *

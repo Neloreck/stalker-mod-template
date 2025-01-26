@@ -9,6 +9,7 @@ import {
   readIniFieldsAsSet,
   readIniNumber,
   readIniNumberAndConditionList,
+  readIniNumberList,
   readIniSectionAsNumberMap,
   readIniSectionAsSet,
   readIniSectionAsStringMap,
@@ -17,6 +18,7 @@ import {
   readIniString,
   readIniStringAndCondList,
   readIniStringList,
+  readIniStringSet,
   readIniStringWB,
   readIniTwoNumbers,
   readIniTwoStringsAndConditionsList,
@@ -84,6 +86,7 @@ describe("readIniStringList util", () => {
         a: "a1",
         b: "b2, b3, b4",
         c: "",
+        f: "a,,c",
       },
     });
 
@@ -93,11 +96,39 @@ describe("readIniStringList util", () => {
     expect(readIniStringList(ini, "section1", "d", false)).toEqualLuaArrays([]);
     expect(readIniStringList(ini, "section1", "d", false, "")).toEqualLuaArrays([]);
     expect(readIniStringList(ini, "section1", "e", false, "e1, e2")).toEqualLuaArrays(["e1", "e2"]);
+    expect(readIniStringList(ini, "section1", "f", false, "e1, e2")).toEqualLuaArrays(["a", "c"]);
 
     expect(() => readIniStringList(ini, "section2", "a", true)).toThrow();
     expect(() => readIniStringList(ini, "section2", "3", true)).toThrow();
     expect(() => readIniStringList(ini, "section2", "3", true, "")).toThrow();
     expect(() => readIniStringList(ini, "section2", "3", false)).not.toThrow();
+  });
+});
+
+describe("readIniStringSet util", () => {
+  it("utils should correctly get data from ini files", () => {
+    const ini: IniFile = MockIniFile.mock("example.ltx", {
+      section1: {
+        a: "a1",
+        b: "b2, b3, b4",
+        c: "",
+        f: "a,,c",
+      },
+    });
+
+    expect(readIniStringSet(ini, "section1", "a", true, "")).toEqualLuaTables({ a1: true });
+    expect(readIniStringSet(ini, "section1", "b", true, "")).toEqualLuaTables({ b2: true, b3: true, b4: true });
+    expect(readIniStringSet(ini, "section1", "c", true, "")).toEqualLuaTables({});
+    expect(readIniStringSet(ini, "section1", "d", false)).toEqualLuaTables({});
+    expect(readIniStringSet(ini, "section1", "d", false, "")).toEqualLuaTables({});
+    expect(readIniStringSet(ini, "section1", "e", false, "e1, e2")).toEqualLuaTables({ e1: true, e2: true });
+    expect(readIniStringSet(ini, "section1", "e", false, "e1 e2")).toEqualLuaTables({ e1: true, e2: true });
+    expect(readIniStringSet(ini, "section1", "f", false, "e1 e2")).toEqualLuaTables({ a: true, c: true });
+
+    expect(() => readIniStringSet(ini, "section2", "a", true)).toThrow();
+    expect(() => readIniStringSet(ini, "section2", "3", true)).toThrow();
+    expect(() => readIniStringSet(ini, "section2", "3", true, "")).toThrow();
+    expect(() => readIniStringSet(ini, "section2", "3", false)).not.toThrow();
   });
 });
 
@@ -117,6 +148,33 @@ describe("readIniNumber util", () => {
     expect(readIniNumber(ini, "section1", "c", false, 3)).toBe(3);
 
     expect(() => readIniNumber(ini, "section2", "a", true)).toThrow();
+  });
+});
+
+describe("readIniNumberList util", () => {
+  it("utils should correctly get data from ini files", () => {
+    const ini: IniFile = MockIniFile.mock("example.ltx", {
+      section1: {
+        a: "a1, 2, 3",
+        b: "1, 2.5, -3, -5.1, 6.0",
+        c: "1, a, 2.5, b, -3, c, -5.1, d, 6.0",
+        d: "1,,2",
+        e: "",
+      },
+    });
+
+    expect(readIniNumberList(ini, "section1", "a", true, "")).toEqualLuaArrays([1, 2, 3]);
+    expect(readIniNumberList(ini, "section1", "b", true, "")).toEqualLuaArrays([1, 2.5, -3, -5.1, 6]);
+    expect(readIniNumberList(ini, "section1", "c", true, "")).toEqualLuaArrays([1, 2.5, -3, -5.1, 6]);
+    expect(readIniNumberList(ini, "section1", "d", false)).toEqualLuaArrays([1, 2]);
+    expect(readIniNumberList(ini, "section1", "e", false)).toEqualLuaArrays([]);
+    expect(readIniNumberList(ini, "section1", "f", false, "")).toEqualLuaArrays([]);
+    expect(readIniNumberList(ini, "section1", "g", false, "e1, e2")).toEqualLuaArrays([1, 2]);
+
+    expect(() => readIniNumberList(ini, "section2", "a", true)).toThrow();
+    expect(() => readIniNumberList(ini, "section2", "3", true)).toThrow();
+    expect(() => readIniNumberList(ini, "section2", "3", true, "")).toThrow();
+    expect(() => readIniNumberList(ini, "section2", "3", false)).not.toThrow();
   });
 });
 

@@ -88,14 +88,14 @@ export class ActorInventoryMenuManager extends AbstractManager {
    * @param item - item game object receiving UI focus
    */
   public onItemFocusReceived(item: GameObject): void {
-    logger.info("Actor item focus received: %s", item?.name());
+    // logger.info("Actor item focus received: %s", item?.name());
   }
 
   /**
    * @param item - item game object losing UI focus
    */
   public onItemFocusLost(item: GameObject): void {
-    logger.info("Actor item focus lost: %s", item?.name());
+    // logger.info("Actor item focus lost: %s", item?.name());
   }
 
   /**

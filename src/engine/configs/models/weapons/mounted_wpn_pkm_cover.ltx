@@ -4,44 +4,40 @@ angular_factor = 1
 
 [car_definition]
 camera_pos = -0.4, 1.7, 2.4
-driving_wheels = joint_actor ; ������� �����
-steering_wheels = joint_actor ; ������� �����
-breaking_wheels = joint_actor ; ���������� �����
-doors = link ; �����
-; steer = joint_actor ; ����
-driver_place = link ; ����� ��������
-exhausts = joint_actor ; ��������� �����
+driving_wheels = joint_actor
+steering_wheels = joint_actor
+breaking_wheels = joint_actor
+doors = link
+driver_place = link
+exhausts = joint_actor
 exhaust_particles = explosions\expl_mushroom_01
 damage = damage_bones
-fuel_tank = 250. ; L
-fuel_consumption = 0.1 ; L / (100k R) ; liters per 100 000 rotations
-engine_power = 25 ; horse_power (kW=hp*0.808) max power
-max_power_rpm = 2300 ; (nominal rpm ) on this rpm value engine power reaches maximum
-max_torque_rpm = 1600. ; on this rpm engine torque reaches maximum
+fuel_tank = 250.
+fuel_consumption = 0.1
+engine_power = 25
+max_power_rpm = 2300
+max_torque_rpm = 1600.
 power_increment_factor = 0.01
 power_decrement_factor = 0.1
 rpm_increment_factor = 0.02
 rpm_decrement_factor = 0.02
 m_power_neutral_factor = 0.75
-max_engine_rpm = 3000 ; rpm (5000) rpm will never be more
-idling_engine_rpm = 750 ; rpm (750) min rpm - starts from this rpm value
-reference_radius = 0.65 ; ������ ������, ������������ ��� �������� ���������
-axle_friction = 0.0001 ; ���������� �������� � ����������� �������. (N*m)
-steering_speed = 0.5 ; ����� �������� �������� ������, � ��������. rps (1)
-steering_torque = 900000. ; ���� �������������� ����. (N*m)
-break_torque = 0.06 ; ���� ��������� �������. (N*m)
-break_time = 1.0 ; ����� ���������� ���� ���������� �� ���������, ��� ��������������� (������� �����)
-hand_break_torque = 0.06 ; ���� ���������� �������� (�� ��������� = break_torque)
-main_gear_ratio = 20.0 ; ������������ ���������
-auto_transmission = on ; �������������� ������� (on/off)
+max_engine_rpm = 3000
+idling_engine_rpm = 750
+reference_radius = 0.65
+axle_friction = 0.0001
+steering_speed = 0.5
+steering_torque = 900000.
+break_torque = 0.06
+break_time = 1.0
+hand_break_torque = 0.06
+main_gear_ratio = 20.0
+auto_transmission = on
 
 [transmission_gear_ratio]
-; shift down/ shift up. (rpm, ����������� ��� ������������)
 R = 2.0, 1500,2450
 N1 = 2.0, 1500,2450
 N2 = 1.0, 1500,2450
-; N3 = 1.71, 2200,2850
-; N4 = 1.00, 2200,2850
 
 [lights]
 headlights = f1,f2
@@ -75,10 +71,10 @@ explosion_sound = weapons\heli_explosion
 relative_pos = 0.0,0.5,3.0.
 
 [doors]
-open_torque_factor = 10 ; ��������� ������� ��� ��� ���������� ����� (default = 2)
+open_torque_factor = 10
 
 [animations]
-driver_animation_type = 0 ; ��� �������� ������ ��� ������ ������.
+driver_animation_type = 0
 
 [damage_particles]
 explosion_particles = explosions\expl_mushroom_01
@@ -96,14 +92,11 @@ link = 0,0,0
 
 [collision_damage]
 
-[damage_bones] ; ���������� ������ � ������, �� ��� ��������
-; bone_name = <hit_scale>,<-1>,<wound_scale>
-; <hit_scale> - �����. ��������� ���� (���������� ��������)
-; <wound_scale> - �����. ��������� �������� �������� ���� - ��������������
+[damage_bones]
 default = 1, -1, 0.1
 
 [immunities]
-burn_immunity = 0.0 ; ������������ ����������
+burn_immunity = 0.0
 strike_immunity = 0.0
 shock_immunity = 0.0
 wound_immunity = 0.0
@@ -134,7 +127,7 @@ light_range = 15.0
 light_time = 0.5
 fragment_speed = 76
 fragment_tracer_max_length = 3
-explode_duration = 50 ; ���������������� ������ (�)
+explode_duration = 50
 snd_explode = weapons\heli_explosion
 wallmark_section = explosion_marks
 
@@ -151,65 +144,65 @@ spring_factor = 0.8
 friction_factor = 1.4
 
 [front_left_wheel]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [front_right_wheel]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [front_left_wheel2]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [front_right_wheel2]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [back_left_wheel]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [back_right_wheel]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [back_left_wheel2]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque))
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [back_right_wheel2]
-break_torque = 0.060 ; ���� ��������� �������. (N*m
-hand_break_torque = 0.060 ; ���� ���������� �������� (�� ��������� = break_torque)
+break_torque = 0.060
+hand_break_torque = 0.060
 damping_factor = 20
 spring_factor = 0.8
 friction_factor = 1.4
 
 [mounted_weapon_definition]
-fire_bone = joint_fire ; fire bone name
-rotate_x_bone = joint_rotate_x ; rotate X-axis(pitch) bone name
-rotate_y_bone = joint_rotate_y ; rotate Y-axis(head) bone name
+fire_bone = joint_fire
+rotate_x_bone = joint_rotate_x
+rotate_y_bone = joint_rotate_y
 min_gun_speed = 10
 max_gun_speed = 10
 wpn_section = stationary_mgun
@@ -224,9 +217,8 @@ dynamics\scene_objects\part\part_none
 time = 30
 
 [impulse_transition_to_parts]
-random_min = 10.0 ; �������� �������� ������������� �������� ��������������� ����� ������ �������
-random_hit_imp = 1.0 ; �������� �������� ������������� �������� ��������������� ������������ ����
-; ref_bone = ; ����� �� �� ������� ������������ �������� ��� ������ � ������� ����� �� ������, �� ��������� ���
-imp_transition_factor = 1.0 ; ������ � ������� �������������� ��� �� ��������� ������� �� ���� ������
-lv_transition_factor = 0.5 ; ����������� �������� �������� ��������
-av_transition_factor = 0.5 ; ����������� �������� ������� ��������
+random_min = 10.0
+random_hit_imp = 1.0
+imp_transition_factor = 1.0
+lv_transition_factor = 0.5
+av_transition_factor = 0.5

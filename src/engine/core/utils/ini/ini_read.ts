@@ -5,6 +5,7 @@ import {
   parseNumbersList,
   parseParameters,
   parseStringsList,
+  parseStringsSet,
 } from "@/engine/core/utils/ini/ini_parse";
 import { IniFile, LuaArray, Optional, TCount, TName, TSection } from "@/engine/lib/types";
 
@@ -89,7 +90,7 @@ export function readIniStringWB<D = string>(
  * @param defaultValue - value to use in case if ini field is missing
  * @returns list from ini file section or parsed default value if section is not declared in ini
  */
-export function readIniStringList<D = string>(
+export function readIniStringList<D extends string = string>(
   ini: IniFile,
   section: Optional<TSection>,
   field: TName,
@@ -97,13 +98,43 @@ export function readIniStringList<D = string>(
   defaultValue: Optional<string> = null
 ): LuaArray<D> {
   if (section && ini.section_exist(section) && ini.line_exist(section, field)) {
-    return parseStringsList(ini.r_string(section, field) as string) as unknown as LuaArray<D>;
+    return parseStringsList(ini.r_string(section, field) as string);
   } else if (required) {
     return abort("Attempt to read a non-existent string field '%s' in section '%s'.", field, section);
   }
 
   if (defaultValue) {
-    return parseStringsList(defaultValue) as unknown as LuaArray<D>;
+    return parseStringsList(defaultValue);
+  } else {
+    return new LuaTable();
+  }
+}
+
+/**
+ * Read string list field from provided ini file section and parse as comma separated set.
+ *
+ * @param ini - config file to read
+ * @param section - config section to read
+ * @param field - section field to read
+ * @param required - whether field is required, throw exception if field is required and not present
+ * @param defaultValue - value to use in case if ini field is missing
+ * @returns set from ini file section or parsed default value if section is not declared in ini
+ */
+export function readIniStringSet<D extends string = string>(
+  ini: IniFile,
+  section: Optional<TSection>,
+  field: TName,
+  required?: boolean,
+  defaultValue: Optional<string> = null
+): LuaTable<D, boolean> {
+  if (section && ini.section_exist(section) && ini.line_exist(section, field)) {
+    return parseStringsSet(ini.r_string(section, field) as string);
+  } else if (required) {
+    return abort("Attempt to read a non-existent string field '%s' in section '%s'.", field, section);
+  }
+
+  if (defaultValue) {
+    return parseStringsSet(defaultValue);
   } else {
     return new LuaTable();
   }
@@ -135,6 +166,36 @@ export function readIniNumber<D = number>(
   }
 
   return defaultValue as number;
+}
+
+/**
+ * Read number list field from provided ini file section and parse as comma separated array.
+ *
+ * @param ini - config file to read
+ * @param section - config section to read
+ * @param field - section field to read
+ * @param required - whether field is required, throw exception if field is required and not present
+ * @param defaultValue - value to use in case if ini field is missing
+ * @returns list from ini file section or parsed default value if section is not declared in ini
+ */
+export function readIniNumberList<D extends number = number>(
+  ini: IniFile,
+  section: Optional<TSection>,
+  field: TName,
+  required?: boolean,
+  defaultValue: Optional<string> = null
+): LuaArray<D> {
+  if (section && ini.section_exist(section) && ini.line_exist(section, field)) {
+    return parseNumbersList(ini.r_string(section, field) as string);
+  } else if (required) {
+    return abort("Attempt to read a non-existent string field '%s' in section '%s'.", field, section);
+  }
+
+  if (defaultValue) {
+    return parseNumbersList(defaultValue);
+  } else {
+    return new LuaTable();
+  }
 }
 
 /**

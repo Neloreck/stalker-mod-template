@@ -9,7 +9,7 @@ import { Optional } from "#/utils/types";
  */
 export class NodeLogger {
   public static LOG_FILE_BUFFER: Array<string> = [];
-  public static LOG_FILE_BUFFER_LINES_LIMIT: number = 5000;
+  public static LOG_FILE_BUFFER_LINES_LIMIT: number = 50_000;
   public static LOG_FILE_BUFFER_SPLICE: number = 100;
 
   public static IS_CONSOLE_ENABLED: boolean = true;

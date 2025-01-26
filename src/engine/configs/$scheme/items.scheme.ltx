@@ -162,7 +162,7 @@ description = string
 frag_hit_critical = u8
 hit_power_critical = f32[]
 k_hit_critical = u32
-slot = i8
+slot = enum:-1,0,1,2,3,4,5
 sprint_allowed = bool
 use_aim_bullet = bool
 use_first_bullet = bool
@@ -175,8 +175,8 @@ inv_grid_height = u8
 inv_grid_width = u8
 inv_grid_x = u32
 inv_grid_y = u32
-inv_name = string
-inv_name_short = string
+inv_name = ?string
+inv_name_short = ?string
 inv_weight = f32
 upgr_icon_height = ?u32
 upgr_icon_width = ?u32
@@ -270,7 +270,6 @@ kill_msg_y = ?u32
 magnetic_beam_shot = ?bool ; true by default
 tracer = ?enum:on,off
 tracer_color_ID = ?u8
-tracers = ?enum:on,off
 wallmark_section = ?section
 wm_size = f32
 
@@ -465,7 +464,7 @@ wm_size = f32
 [$inventory_box]
 strict = true
 GroupControlSection = string
-discovery_dependency = string
+discovery_dependency = ?string
 $spawn = string
 class = string
 cform = string
@@ -518,7 +517,7 @@ attach_angle_offset = vector
 attach_bone_name = string
 attach_position_offset = vector
 cost = u32
-discovery_dependency = string
+discovery_dependency = ?string
 visual = ?string
 
 [$outfit_base]

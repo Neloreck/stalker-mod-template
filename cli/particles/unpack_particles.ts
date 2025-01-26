@@ -3,7 +3,7 @@ import * as path from "path";
 
 import { blue } from "chalk";
 
-import { GAME_DATA_PARTICLES_DIR, RESOURCES_DIR, TARGET_DIR, XRF_UTILS_PATH } from "#/globals";
+import { RESOURCES_DIR, RESOURCES_PARTICLES_UNPACKED_DIR, TARGET_DIR, XRF_UTILS_PATH } from "#/globals";
 import { NodeLogger } from "#/utils/logging";
 import { TimeTracker } from "#/utils/timing";
 
@@ -26,7 +26,7 @@ export async function unpackParticles(parameters: IUnpackParticlesParameters = {
 
   const timeTracker: TimeTracker = new TimeTracker().start();
   const from: string = parameters.path ?? path.resolve(RESOURCES_DIR, "particles.xr");
-  const to: string = parameters.dest ?? GAME_DATA_PARTICLES_DIR;
+  const to: string = parameters.dest ?? RESOURCES_PARTICLES_UNPACKED_DIR;
 
   const command: string = `${XRF_UTILS_PATH} unpack-particles -p ${from} -d ${to} ${parameters.force ? "-f" : ""}`;
 

@@ -2,12 +2,12 @@ import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { level } from "xray16";
 
 import { registerOfflineObject, registerSimulator, registry } from "@/engine/core/database";
-import { syncSpawnedObjectPosition } from "@/engine/core/utils/object/object_spawn";
+import { setupSpawnedObjectPosition } from "@/engine/core/utils/object/object_spawn";
 import { GameObject, ServerCreatureObject, Vector } from "@/engine/lib/types";
 import { mockRegisteredActor, MockSmartTerrain, resetRegistry } from "@/fixtures/engine";
 import { MockAlifeMonsterBase, MockGameObject, MockVector } from "@/fixtures/xray";
 
-describe("syncSpawnedObjectPosition util", () => {
+describe("setupSpawnedObjectPosition util", () => {
   beforeEach(() => {
     resetRegistry();
     registerSimulator();
@@ -21,7 +21,7 @@ describe("syncSpawnedObjectPosition util", () => {
     registry.spawnedVertexes.set(object.id(), 400);
     jest.spyOn(level, "vertex_position").mockImplementationOnce(() => position);
 
-    syncSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
+    setupSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
 
     expect(object.set_npc_position).toHaveBeenCalledWith(position);
     expect(level.vertex_position).toHaveBeenCalledWith(400);
@@ -37,7 +37,7 @@ describe("syncSpawnedObjectPosition util", () => {
 
     jest.spyOn(level, "vertex_position").mockImplementationOnce(() => position);
 
-    syncSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
+    setupSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
 
     expect(level.vertex_position).toHaveBeenCalledWith(500);
     expect(object.set_npc_position).toHaveBeenCalledWith(position);
@@ -53,7 +53,7 @@ describe("syncSpawnedObjectPosition util", () => {
     serverObject.m_smart_terrain_id = terrain.id;
 
     terrain.register_npc(serverObject);
-    syncSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
+    setupSpawnedObjectPosition(object, serverObject.m_smart_terrain_id);
 
     expect(object.set_npc_position).toHaveBeenCalledTimes(1);
     expect(object.set_npc_position).toHaveBeenCalledWith(

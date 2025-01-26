@@ -21,7 +21,6 @@
     "scripts": "../src/engine/scripts",
     "translations": "../src/engine/translations",
     "extensions": "../src/engine/extensions",
-    "particles": "../src/engine/particles",
     "ui": "../src/engine/forms"
   },
   "compression": {

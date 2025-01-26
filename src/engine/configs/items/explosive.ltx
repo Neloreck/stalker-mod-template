@@ -37,12 +37,9 @@ explode_particles = explosions\explosion_fuelcan
 light_color = 1.9,1.3,0.5
 light_range = 30.0
 light_time = 1.5
-; ������ �� ��������
 fragment_speed = 100
-explode_duration = 5 ; ���������������� ������ (�)
-; wallmarks
+explode_duration = 5
 wallmark_section = explosion_marks
-; �����
 snd_explode = weapons\f1_explode
 immunities_sect = explosive_fuelcan_immunities_sect
 
@@ -80,7 +77,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 50
 blast = 1.50
@@ -98,11 +94,9 @@ explode_particles = explosions\explosion_mobiltank
 light_color = 1.9,1.3,0.5
 light_range = 30.0
 light_time = 1
-; ������ �� ��������
-fragment_speed = 100 ; �������� �������� (�/�)
-explode_duration = 5 ; ���������������� ������ (�)
+fragment_speed = 100
+explode_duration = 5
 wallmark_section = explosion_marks
-; �����
 snd_explode = weapons\f1_explode
 immunities_sect = explosive_tank_immunities_sect
 
@@ -135,7 +129,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 1.50
@@ -153,13 +146,11 @@ explode_particles = explosions\explosion_barrel
 light_color = 1.9,1.4,0.5
 light_range = 14.0
 light_time = 0.85
-; ������ �� ��������
-fragment_speed = 100 ; �������� �������� (�/�)
-explode_duration = 5 ; ���������������� ������ (�)
+fragment_speed = 100
+explode_duration = 5
 wallmark_section = explosion_marks
 snd_explode = weapons\f1_explode
 immunities_sect = explosive_barrel_low_immunities_sect
-; time_to_explode = 0.0
 
 [explosive_grenade]:identity_immunities,delayed_action_fuse,default_weapon_params
 $scheme = $item_explosive
@@ -178,7 +169,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 2.50
@@ -196,14 +186,11 @@ explode_particles = explosions\explosion_01
 light_color = 1.9,1.4,0.5
 light_range = 14.0
 light_time = 0.85
-fragment_speed = 100 ; �������� �������� (�/�)
-explode_duration = 2 ; ���������������� ������ (�)
-; wallmarks
+fragment_speed = 100
+explode_duration = 2
 wallmark_section = explosion_marks
-; �����
 snd_explode = weapons\t_rgd5_explosion
 immunities_sect = explosive_explosive_grenade_immunities_sect
-; time_to_explode = 0.0
 
 [pri_a25_enter_door_explosive_grenade]:explosive_grenade
 $scheme = $item_explosive
@@ -248,7 +235,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 1.00
@@ -266,13 +252,11 @@ explode_particles = explosions\explosion_01
 light_color = 1.9,1.4,0.5
 light_range = 14.0
 light_time = 0.85
-; ������ �� ��������
-fragment_speed = 50 ; �������� �������� (�/�)
-explode_duration = 5 ; ���������������� ������ (�)
+fragment_speed = 50
+explode_duration = 5
 wallmark_section = explosion_marks
 snd_explode = weapons\rpg7_explode
 immunities_sect = explosive_hide_immunities_sect
-; time_to_explode = 0.0
 
 [explosive_hide_immunities_sect]
 $scheme = $immunities
@@ -303,7 +287,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 0.25
@@ -321,14 +304,11 @@ explode_particles = explosions\explosion_concrete_box
 light_color = 0,0,0
 light_range = 0.0
 light_time = 0.85
-; ������ �� ��������
-fragment_speed = 25 ; �������� �������� (�/�)
-explode_duration = 2 ; ���������������� ������ (�)
+fragment_speed = 25
+explode_duration = 2
 wallmark_section = explosion_marks
-; �����
 snd_explode = weapons\f1_explode_
 immunities_sect = explosive_barrel_low_immunities_sect
-; time_to_explode = 0.0
 
 [explosive_barrel_low_immunities_sect]
 $scheme = $immunities
@@ -359,7 +339,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 1.50
@@ -377,13 +356,10 @@ explode_particles = explosions\explosion_barrel
 light_color = 1.9,1.4,0.5
 light_range = 14.0
 light_time = 0.85
-; ������ �� ��������
-fragment_speed = 100 ; �������� �������� (�/�)
-explode_duration = 5 ; ���������������� ������ (�)
-; �����
+fragment_speed = 100
+explode_duration = 5
 snd_explode = weapons\f1_explode
 immunities_sect = explosive_barrel_immunities_sect
-; wallmarks
 wallmark_section = explosion_marks
 
 [explosive_barrel_immunities_sect]
@@ -415,7 +391,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 500
 blast = 1.50
@@ -433,9 +408,8 @@ explode_particles = explosions\explosion_mobiltank
 light_color = 1.9,1.2,0.5
 light_range = 30.0
 light_time = 1
-; ������ �� ��������
-fragment_speed = 100 ; �������� �������� (�/�)
-explode_duration = 5 ; ���������������� ������ (�)
+fragment_speed = 100
+explode_duration = 5
 snd_explode = weapons\f1_explode
 immunities_sect = explosive_mobiltank_immunities_sect
 wallmark_section = explosion_marks
@@ -469,7 +443,6 @@ inv_grid_width = 1
 inv_grid_height = 1
 inv_grid_x = 1
 inv_grid_y = 0
-; ���� ���������� ���������
 can_take = false
 cost = 50
 blast = 3.00
@@ -479,8 +452,8 @@ frags = 100
 frags_r = 10
 frag_hit = 100
 frag_hit_impulse = 100
-hit_type_blast = explosion ; chemical_burn
-hit_type_frag = chemical_burn ; burn
+hit_type_blast = explosion
+hit_type_frag = chemical_burn
 up_throw_factor = 1.0
 wm_size = 0.1
 explode_particles = explosions\explosion_dynamite
@@ -488,11 +461,9 @@ light_color = 1.9,1.3,0.5
 light_range = 30.0
 light_time = 1.5
 fragment_speed = 200
-explode_duration = 5 ; ���������������� ������ (�)
-; �����
+explode_duration = 5
 snd_explode = weapons\f1_explode
 immunities_sect = dinamit_immunities_sect
-; condition_to_explode = 0.0
 wallmark_section = explosion_marks
 
 [dinamit_immunities_sect]

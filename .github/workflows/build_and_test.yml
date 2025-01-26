@@ -110,7 +110,6 @@ jobs:
       - run: npm run lint
       - run: npm run cli format ltx -- --check
       - run: npm run cli verify ltx
-      - run: npm run cli verify particles-unpacked
 
       - name: Save eslint cache
         if: ${{ steps.cache-eslint-restore.outputs.cache-hit != 'true' && github.event_name != 'pull_request' }}

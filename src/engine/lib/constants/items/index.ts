@@ -6,8 +6,7 @@ import { TFoodItem } from "@/engine/lib/constants/items/food";
 import { THelmet } from "@/engine/lib/constants/items/helmets";
 import { TOutfit } from "@/engine/lib/constants/items/outfits";
 import { TQuestItem } from "@/engine/lib/constants/items/quest_items";
-import { TWeaponAddon } from "@/engine/lib/constants/items/weapon_addons";
-import { TWeapon } from "@/engine/lib/constants/items/weapons";
+import { TWeapon, TWeaponAddon } from "@/engine/lib/constants/items/weapons";
 
 /**
  * Type definition of possible item section.

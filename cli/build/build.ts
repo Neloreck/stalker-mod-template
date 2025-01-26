@@ -37,6 +37,7 @@ export interface IBuildCommandParameters {
   assetOverrides: boolean;
   verbose?: boolean;
   luaLogs?: boolean;
+  injectTracyZones?: boolean;
   clean?: boolean;
   include: "all" | Array<EBuildTarget>;
   exclude: Array<EBuildTarget>;
@@ -74,13 +75,6 @@ export async function build(parameters: IBuildCommandParameters): Promise<void> 
       log.info("Apply filters:", parameters.filter);
     }
 
-    /**
-     * Inform about logs strip step.
-     */
-    if (!parameters.luaLogs) {
-      log.info("Lua logger is disabled, strip all calls from resulting LUA bundle");
-    }
-
     // Do not allow filtering 'all' builds.
     if (parameters.filter?.length && parameters.include.length === 1 && parameters.include[0] === "all") {
       throw new Error("Provided filter parameter, cannot use it when target is 'all'");
@@ -101,7 +95,7 @@ export async function build(parameters: IBuildCommandParameters): Promise<void> 
      * Build game scripts.
      */
     if (buildTargets.includes(EBuildTarget.SCRIPTS)) {
-      await buildDynamicScripts();
+      await buildDynamicScripts(parameters);
       timeTracker.addMark("BUILT_DYNAMIC_SCRIPTS");
     } else {
       log.info("Scripts build steps skipped");

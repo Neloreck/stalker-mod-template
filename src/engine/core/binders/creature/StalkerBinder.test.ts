@@ -16,7 +16,7 @@ import { WoundManager } from "@/engine/core/schemes/stalker/wounded/WoundManager
 import {
   setupObjectInfoPortions,
   setupObjectStalkerVisual,
-  syncSpawnedObjectPosition,
+  setupSpawnedObjectPosition,
 } from "@/engine/core/utils/object";
 import { emitSchemeEvent, setupObjectLogicsOnSpawn } from "@/engine/core/utils/scheme";
 import { ACTOR_ID } from "@/engine/lib/constants/ids";
@@ -37,7 +37,7 @@ describe("StalkerBinder", () => {
     registerSimulator();
 
     resetFunctionMock(setupObjectLogicsOnSpawn);
-    resetFunctionMock(syncSpawnedObjectPosition);
+    resetFunctionMock(setupSpawnedObjectPosition);
     resetFunctionMock(emitSchemeEvent);
   });
 
@@ -75,8 +75,8 @@ describe("StalkerBinder", () => {
     expect(object.group_throw_time_interval).toHaveBeenCalledWith(2000);
     expect(object.apply_loophole_direction_distance).toHaveBeenCalledWith(1);
 
-    expect(syncSpawnedObjectPosition).toHaveBeenCalledTimes(1);
-    expect(syncSpawnedObjectPosition).toHaveBeenCalledWith(object, serverObject.m_smart_terrain_id);
+    expect(setupSpawnedObjectPosition).toHaveBeenCalledTimes(1);
+    expect(setupSpawnedObjectPosition).toHaveBeenCalledWith(object, serverObject.m_smart_terrain_id);
 
     binder.net_destroy();
 

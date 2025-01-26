@@ -19,7 +19,7 @@ import { updateMonsterSquadAction } from "@/engine/core/objects/squad/update";
 import { SchemeHear } from "@/engine/core/schemes/shared/hear";
 import { hasInfoPortion } from "@/engine/core/utils/info_portion";
 import { parseConditionsList } from "@/engine/core/utils/ini";
-import { syncSpawnedObjectPosition } from "@/engine/core/utils/object";
+import { setupSpawnedObjectPosition } from "@/engine/core/utils/object";
 import {
   emitSchemeEvent,
   scriptReleaseMonster,
@@ -54,7 +54,7 @@ describe("MonsterBinder", () => {
     resetFunctionMock(setupObjectLogicsOnSpawn);
     resetFunctionMock(scriptReleaseMonster);
     resetFunctionMock(updateMonsterSquadAction);
-    resetFunctionMock(syncSpawnedObjectPosition);
+    resetFunctionMock(setupSpawnedObjectPosition);
   });
 
   it("should correctly initialize", () => {
@@ -148,8 +148,8 @@ describe("MonsterBinder", () => {
     state.activeScheme = EScheme.ANIMPOINT;
     state[EScheme.ANIMPOINT] = mockSchemeState(EScheme.ANIMPOINT);
 
-    expect(syncSpawnedObjectPosition).toHaveBeenCalledTimes(1);
-    expect(syncSpawnedObjectPosition).toHaveBeenCalledWith(object, serverObject.m_smart_terrain_id);
+    expect(setupSpawnedObjectPosition).toHaveBeenCalledTimes(1);
+    expect(setupSpawnedObjectPosition).toHaveBeenCalledWith(object, serverObject.m_smart_terrain_id);
 
     binder.net_destroy();
 

@@ -5,18 +5,25 @@ import * as path from "path";
 import { blueBright, yellowBright } from "chalk";
 
 import { IBuildCommandParameters } from "#/build/build";
-import { default as config } from "#/config.json";
-import { CLI_DIR, TARGET_GAME_DATA_DIR } from "#/globals/paths";
+import { RESOURCES_DIR, TARGET_GAME_DATA_DIR } from "#/globals/paths";
+import { getProjectAssetsRoots } from "#/utils/build";
 import { getDiffs, IDiffs } from "#/utils/fs/get_diffs";
-import { normalizeParameterPath } from "#/utils/fs/normalize_parameter_path";
 import { readFolderGen } from "#/utils/fs/read_dir_content_flat_gen";
 import { NodeLogger } from "#/utils/logging";
 import { Optional } from "#/utils/types";
 
 const log: NodeLogger = new NodeLogger("BUILD_ASSET_STATICS");
 
-const GENERIC_FILES: Array<string> = ["README.md", "LICENSE", ".git", ".gitignore", ".gitattributes"];
-const UNEXPECTED_DIRECTORIES: Array<string> = ["core", "configs", "forms,", "lib", "scripts"];
+const UNEXPECTED_ENTITIES: Array<string> = ["core", "configs", "forms,", "lib", "scripts"];
+const EXCLUDED_ENTITIES: Array<string> = [
+  "README.md",
+  "LICENSE",
+  ".git",
+  ".gitignore",
+  ".gitattributes",
+  "textures_unpacked",
+  "particles_unpacked",
+];
 
 /**
  * Build mod statics from configured destinations.
@@ -24,33 +31,22 @@ const UNEXPECTED_DIRECTORIES: Array<string> = ["core", "configs", "forms,", "lib
 export async function buildResourcesStatics(parameters: IBuildCommandParameters): Promise<void> {
   log.info(blueBright("Build resources"));
 
-  const configuredDefaultPath: string = path.resolve(
-    CLI_DIR,
-    normalizeParameterPath(config.resources.mod_assets_base_folder)
-  );
-
-  const configuredTargetPath: Array<string> = parameters.assetOverrides
-    ? config.resources.mod_assets_override_folders.map((it) => path.resolve(CLI_DIR, normalizeParameterPath(it)))
-    : [];
-
-  if (parameters.assetOverrides && config.resources.mod_assets_locales[parameters.language]) {
-    config.resources.mod_assets_locales[parameters.language].forEach((it) => {
-      configuredTargetPath.push(path.resolve(CLI_DIR, normalizeParameterPath(it)));
-    });
-  } else {
-    log.warn("No language resources detected for current locale");
-  }
-
-  const resourceFolders: Array<string> = [...configuredTargetPath, configuredDefaultPath].filter((it) => {
+  const resourceRoots: Array<string> = (
+    parameters.assetOverrides ? [...getProjectAssetsRoots(parameters.language), RESOURCES_DIR] : [RESOURCES_DIR]
+  ).filter((it) => {
     log.debug("Resources folder candidate check:", yellowBright(it));
 
     return fs.existsSync(it);
   });
 
-  if (resourceFolders.length) {
-    log.info("Process folders with resources:", resourceFolders.length);
+  // todo: Build diff as static step and only then copy. Same resource can be present in few folders.
+  // todo: Build diff as static step and only then copy. Same resource can be present in few folders.
+  // todo: Build diff as static step and only then copy. Same resource can be present in few folders.
 
-    for (const folderPath of resourceFolders) {
+  if (resourceRoots.length) {
+    log.info("Process folders with resources:", resourceRoots.length);
+
+    for (const folderPath of resourceRoots) {
       const sourcePaths: Array<string> = await validateResources(folderPath);
 
       for (const sourcePath of sourcePaths) {
@@ -78,10 +74,17 @@ async function validateResources(folderPath: string): Promise<Array<string>> {
 
   function allowFiles(dirent: fs.Dirent): Optional<string> {
     const name: string = dirent.name;
+    const target: string = path.join(folderPath, name);
+
+    if (EXCLUDED_ENTITIES.includes(name)) {
+      log.debug("SKIP EXCLUDED:", name, "=>", target);
+
+      return null;
+    }
 
     if (dirent.isDirectory()) {
       // Do not allow copy of folders that overlap with auto-generated code.
-      if (UNEXPECTED_DIRECTORIES.includes(name)) {
+      if (UNEXPECTED_ENTITIES.includes(name)) {
         throw new Error(`Provided not expected directory for resources copy: '${name}'.`);
       }
 
@@ -89,15 +92,9 @@ async function validateResources(folderPath: string): Promise<Array<string>> {
       if (name.startsWith(".")) {
         return null;
       }
-
-      return path.join(folderPath, name);
     }
 
-    if (!GENERIC_FILES.includes(name)) {
-      return path.join(folderPath, name);
-    }
-
-    return null;
+    return target;
   }
 
   return folders.map(allowFiles).filter(Boolean);

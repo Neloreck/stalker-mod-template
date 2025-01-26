@@ -5,6 +5,7 @@ import { IniFile } from "@/engine/lib/types";
 
 export const ALIFE_CONFIG_LTX: IniFile = new ini_file("alife.ltx");
 
+// todo: Move to simulation?
 export const alifeConfig = {
   OBJECT_CAPTURE_SCRIPT_NAME: "xrf",
   SWITCH_DISTANCE: readIniNumber(ALIFE_CONFIG_LTX, "alife", "switch_distance", true),

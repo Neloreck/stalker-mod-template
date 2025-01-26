@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="unpack-descriptions" type="js.build_tools.npm" folderName="icons">
+  <configuration default="false" name="unpack-descriptions" type="js.build_tools.npm" folderName="sprites">
     <package-json value="$PROJECT_DIR$/package.json" />
     <command value="run" />
     <scripts>

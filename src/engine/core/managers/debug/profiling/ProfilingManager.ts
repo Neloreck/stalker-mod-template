@@ -99,7 +99,7 @@ export class ProfilingManager extends AbstractManager {
 
     // Ensure all conditions for profiling start are met
     if (debug !== null) {
-      logger.info("Profiling enabled, JIT disabled, going to setup hook");
+      logger.info("Profiling enabled, going to setup hook");
       this.setupHook();
     } else {
       logger.info("Debug is not enabled, skip profiling");
@@ -173,6 +173,8 @@ export class ProfilingManager extends AbstractManager {
    * @param context - context of hook call based on call case
    */
   protected hook(context: string): void {
+    logger.info("Skip setup, already started");
+
     const caller = debug.getinfo(3, "f")!;
     const functionInfo: debug.FunctionInfo = debug.getinfo(2)!;
     const functionRef: AnyCallable = functionInfo.func as AnyCallable;

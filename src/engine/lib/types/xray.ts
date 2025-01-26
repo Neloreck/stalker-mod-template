@@ -100,6 +100,7 @@ import {
   TXR_MonsterBodyStateKey,
   TXR_move,
   TXR_net_processor,
+  TXR_ProfilerType,
   TXR_relation,
   TXR_SightType,
   TXR_snd_type,
@@ -214,6 +215,7 @@ export type TGameType = TXR_GAME_TYPE;
 export type TKeyCode = TXR_DIK_key;
 export type TLookType = TXR_look;
 export type TMoveType = TXR_move;
+export type TProfilerType = TXR_ProfilerType;
 export type TRelationType = TXR_relation;
 export type TSightType = TXR_SightType;
 export type TSoundKey = TXR_sound_key;
